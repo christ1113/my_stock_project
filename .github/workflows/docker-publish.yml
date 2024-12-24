@@ -49,3 +49,4 @@ jobs:
       run: |
         docker push christ1113/my_stock_project:frontend-latest
         docker push christ1113/my_stock_project:frontend-v1
+      
