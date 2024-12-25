@@ -3,22 +3,25 @@ name: Docker Build and Push (Single Repo)
 on:
   push:
     branches:
-      - master  # 當程式碼推送到 master 分支時觸發
+      - master
 
 jobs:
   build-backend:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
 
     - name: Login to Docker Hub
-      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      run: |
+        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        docker info
 
-    # 建構後端映像
     - name: Build Backend Docker Image
-      run: docker build -t christ1113/my_stock_project:backend-latest ./stock_backend
+      run: docker build -t christ1113/my_stock_project:backend-latest ./stock_backend --progress=plain
 
     - name: Tag Backend Image
       run: docker tag christ1113/my_stock_project:backend-latest christ1113/my_stock_project:backend-v1
@@ -29,18 +32,22 @@ jobs:
         docker push christ1113/my_stock_project:backend-v1
 
   build-frontend:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+    needs: build-backend
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
 
     - name: Login to Docker Hub
-      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      run: |
+        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+        docker info
 
-    # 建構前端映像
     - name: Build Frontend Docker Image
-      run: docker build -t christ1113/my_stock_project:frontend-latest ./stock_frontend
+      run: docker build -t christ1113/my_stock_project:frontend-latest ./stock_frontend --progress=plain
 
     - name: Tag Frontend Image
       run: docker tag christ1113/my_stock_project:frontend-latest christ1113/my_stock_project:frontend-v1
@@ -49,4 +56,3 @@ jobs:
       run: |
         docker push christ1113/my_stock_project:frontend-latest
         docker push christ1113/my_stock_project:frontend-v1
-      
