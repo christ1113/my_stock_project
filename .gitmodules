@@ -1,0 +1,6 @@
+[submodule "stock_backend"]
+    path = stock_backend
+    url = https://github.com/christ1113/stock_backend.git
+[submodule "stock_frontend"]
+    path = stock_frontend
+    url = https://github.com/christ1113/stock_frontend.git
