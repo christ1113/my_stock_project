@@ -20,9 +20,6 @@ jobs:
         echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
         docker info
 
-    - name: Build Backend Docker Image
-      run: docker build -t christ1113/my_stock_project:backend-latest ./stock_backend --progress=plain
-
     - name: Fix Dockerfile Permissions
       run: chmod 644 ./stock_backend/Dockerfile
 
@@ -51,9 +48,6 @@ jobs:
       run: |
         echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
         docker info
-
-    - name: Build Frontend Docker Image
-      run: docker build -t christ1113/my_stock_project:frontend-latest ./stock_frontend --progress=plain
 
     - name: Fix Dockerfile Permissions
       run: chmod 644 ./stock_frontend/Dockerfile
